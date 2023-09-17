@@ -1,6 +1,15 @@
 import { Random } from "random-js";
+import * as db from './db'
 
-type StatArray = number[];
+enum StatArrayType {
+    Standard = 1,
+    FourD6 = 2,
+}
+
+export type StatArray = {
+    type: 1 | 2;
+    stats: number[];
+}
 
 function fourD6(): StatArray {
     const random = new Random();
@@ -14,11 +23,24 @@ function fourD6(): StatArray {
         stats.push(rolls.reduce((acc, curr) => acc + curr, 0));
     }
 
-    return stats;
+    return {
+        stats,
+        type: StatArrayType.FourD6
+    };
 }
 
 function standard(): StatArray {
-    return [15, 14, 13, 12, 10, 8];
+    return {
+        stats: [15, 14, 13, 12, 10, 8],
+        type: StatArrayType.Standard
+    }
 }
 
-console.log(standard());
+db.init();
+
+
+const testArr = standard();
+
+db.save(testArr);
+
+console.log(db.getAllArrays());
