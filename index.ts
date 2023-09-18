@@ -1,17 +1,17 @@
 import { Random } from "random-js";
 import * as db from './db'
 
-enum StatArrayType {
+enum AbilityScoreGenerator {
     Standard = 1,
     FourD6 = 2,
 }
 
-export type StatArray = {
-    type: 1 | 2;
-    stats: number[];
+export type AbilityScores = {
+    type: AbilityScoreGenerator;
+    scores: number[];
 }
 
-function fourD6(): StatArray {
+function fourD6(): AbilityScores {
     const random = new Random();
 
     const stats: number[] = [];
@@ -24,23 +24,23 @@ function fourD6(): StatArray {
     }
 
     return {
-        stats,
-        type: StatArrayType.FourD6
+        scores: stats,
+        type: AbilityScoreGenerator.FourD6
     };
 }
 
-function standard(): StatArray {
+function standard(): AbilityScores {
     return {
-        stats: [15, 14, 13, 12, 10, 8],
-        type: StatArrayType.Standard
+        scores: [15, 14, 13, 12, 10, 8],
+        type: AbilityScoreGenerator.Standard
     }
 }
 
 db.init();
 
-
 const testArr = standard();
 
 db.save(testArr);
+db.save(fourD6())
 
 console.log(db.getAllArrays());

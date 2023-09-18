@@ -1,5 +1,5 @@
 import { Database } from 'bun:sqlite'
-import { StatArray } from '.';
+import { AbilityScores } from '.';
 
 const db = new Database(':memory:')
 
@@ -38,13 +38,13 @@ export function init() {
     db.run(initData);
 }
 
-export function save(arr: StatArray) {
+export function save(arr: AbilityScores) {
     const stmt = `
         Insert Into stat_array (stat_array_type, strength, dexterity, constitution, intelligence, wisdom, charisma, total)
         Values (?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
-    const stats = arr.stats;
+    const stats = arr.scores;
 
     const sum = stats.reduce((acc, curr) => acc + curr, 0);
 
